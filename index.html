@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>$DRIFT · the continents are drifting</title>
+<meta name="description" content="Live burn tracker for $DRIFT on Pangea: every trade on every chain buys back and burns DRIFT.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06141b;--bg2:#0a1f29;--ink:#e7f0ef;--mut:#86a3a6;--line:#173540;--land:#d9a95b;--land2:#b07a3a;--ember:#ff7a3d;--sea:#0d2c38;--good:#5eead4}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:radial-gradient(1200px 700px at 50% -10%,#0f3442 0%,var(--bg) 60%);color:var(--ink);font:16px/1.5 'Space Grotesk',system-ui,sans-serif;min-height:100vh}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 16px 64px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:22px;letter-spacing:.5px}.brand span{color:var(--ember)}
+.links a{color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:8px 14px;border-radius:999px;margin-left:8px;font-size:14px;white-space:nowrap}
+.links a.buy{background:var(--ember);border-color:var(--ember);color:#1a0b03;font-weight:700}
+h1{font-size:clamp(30px,6vw,56px);line-height:1.05;margin:36px 0 10px;letter-spacing:-1px}
+h1 em{font-style:normal;color:var(--ember)}
+.lede{color:var(--mut);max-width:620px;margin:0 0 20px}
+.map{background:linear-gradient(180deg,var(--sea),#08202a);border:1px solid var(--line);border-radius:18px;overflow:hidden;position:relative}
+.map svg{display:block;width:100%;height:auto}
+.badge{position:absolute;top:14px;left:14px;font:600 12px 'JetBrains Mono',monospace;color:var(--mut);background:rgba(6,20,27,.7);padding:6px 10px;border-radius:8px;border:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card .k{color:var(--mut);font-size:13px}.card .v{font:600 24px 'JetBrains Mono',monospace;margin-top:4px}
+.card .v.ember{color:var(--ember)}
+h2{font-size:20px;margin:34px 0 10px}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:16px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px;font-size:14px}
+th{color:var(--mut);font-weight:500;text-align:right;padding:8px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}
+td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:right;font-family:'JetBrains Mono',monospace}
+td:first-child{font-family:'Space Grotesk',sans-serif;font-weight:500}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.how .card p{margin:6px 0 0;color:var(--mut);font-size:14px}
+.how .n{font:700 13px 'JetBrains Mono',monospace;color:var(--ember)}
+footer{color:var(--mut);font-size:13px;margin-top:34px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.chart{width:100%;height:auto;display:block}
+.empty{color:var(--mut);padding:24px;text-align:center}
+@media (max-width:560px){.links a{margin:6px 6px 0 0}.card .v{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">$<span id="tk">DRIFT</span></div>
+    <div class="links"><a id="xlink" href="#" target="_blank" rel="noopener">X</a><a id="buy" class="buy" href="https://www.pangea.trade/app" target="_blank" rel="noopener">Buy on Pangea</a></div>
+  </header>
+
+  <h1>Pangea is breaking apart.<br><em>Every trade sets it drifting.</em></h1>
+  <p class="lede">$DRIFT lives on five chains at once. Every trade on any of them pays a fee, and half of the creator's share is spent buying DRIFT and burning it, on every chain, about every 15 minutes. The more a chain trades, the further its continent drifts.</p>
+
+  <div class="map">
+    <div class="badge" id="updated">loading…</div>
+    <svg id="world" viewBox="0 0 1000 560" role="img" aria-label="Five continents, one per chain, drifting apart as DRIFT is burned"></svg>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="k">Burned forever</div><div class="v ember" id="burned">-</div></div>
+    <div class="card"><div class="k">Of total supply</div><div class="v" id="pct">-</div></div>
+    <div class="card"><div class="k">Supply left</div><div class="v" id="left">-</div></div>
+    <div class="card"><div class="k">Market cap</div><div class="v" id="mc">-</div></div>
+    <div class="card"><div class="k">24h volume</div><div class="v" id="vol">-</div></div>
+  </div>
+
+  <h2>Burned over time</h2>
+  <div class="panel"><svg class="chart" id="chart" viewBox="0 0 960 220" preserveAspectRatio="none"></svg></div>
+
+  <h2>Continent by continent</h2>
+  <div class="panel"><table id="tbl"><thead><tr><th>Chain</th><th>Burned</th><th>Of its slice</th><th>24h volume</th><th>Price</th></tr></thead><tbody></tbody></table></div>
+
+  <h2>How the drift works</h2>
+  <div class="how">
+    <div class="card"><div class="n">01</div><b>One coin, five chains</b><p>Launched on Pangea on Solana, BSC, Base, Robinhood Chain and Ethereum at once, with the same price everywhere.</p></div>
+    <div class="card"><div class="n">02</div><b>Every trade pays 1%</b><p>A fixed 1% trading fee, set at launch. The platform takes its cut; the rest is the creator's share.</p></div>
+    <div class="card"><div class="n">03</div><b><span id="share">50</span>% of that burns DRIFT</b><p>Pangea's on-chain vault buys DRIFT with it and burns it on each chain about every 15 minutes. Nobody can switch it off.</p></div>
+    <div class="card"><div class="n">04</div><b>Liquidity is locked</b><p>No team allocation, no dev bag: all supply went into the pools at launch, and the pools are locked on every chain.</p></div>
+  </div>
+
+  <footer><span id="foot">Numbers from Pangea, refreshed about every 10 minutes.</span><span>Not financial advice. Memecoins can go to zero.</span></footer>
+</div>
+
+<script>
+const CH = { solana: ['Solana', '#9b6bff'], bsc: ['BSC', '#f3ba2f'], base: ['Base', '#3b82f6'], robinhood: ['Robinhood', '#22c55e'], ethereum: ['Ethereum', '#a5b4fc'] };
+const fmt = n => n == null ? '-' : n >= 1e9 ? (n / 1e9).toFixed(2) + 'B' : n >= 1e6 ? (n / 1e6).toFixed(2) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1) + 'K' : Math.round(n).toString();
+const usd = n => n == null ? '-' : '$' + fmt(n);
+const price = p => !p ? '-' : p >= 0.01 ? '$' + p.toFixed(4) : '$' + p.toPrecision(3);
+const ago = iso => { const s = (Date.now() - Date.parse(iso)) / 1000; return s < 90 ? 'just now' : s < 3600 ? Math.round(s / 60) + ' min ago' : Math.round(s / 3600) + ' h ago'; };
+
+// seeded blob shapes so each continent keeps its outline between refreshes
+function blobPath(cx, cy, r, seed) {
+  let s = seed; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const f = [[2, .14 * rnd(), rnd() * 6], [3, .13 * rnd(), rnd() * 6], [5, .08 * rnd(), rnd() * 6], [7, .05, rnd() * 6]];
+  const P = [];
+  for (let i = 0; i < 48; i++) { const a = i / 48 * Math.PI * 2; let k = 1; f.forEach(([q, A, ph]) => k += A * Math.sin(a * q + ph)); P.push([cx + Math.cos(a) * r * k, cy + Math.sin(a) * r * k * .82]); }
+  let d = `M${P[0]}`;
+  for (let i = 0; i < P.length; i++) { const p0 = P[(i + 47) % 48], p1 = P[i], p2 = P[(i + 1) % 48], p3 = P[(i + 2) % 48];
+    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`; }
+  return d + 'Z';
+}
+
+function drawWorld(chains) {
+  const svg = document.getElementById('world');
+  const cx = 500, cy = 280, keys = chains.map(c => c.chain);
+  let out = '<defs><radialGradient id="ld" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#e8bd72"/><stop offset="1" stop-color="#a86f33"/></radialGradient></defs>';
+  // faint "Pangea" outline where they all started
+  out += `<circle cx="${cx}" cy="${cy}" r="120" fill="none" stroke="#1e4552" stroke-dasharray="4 8"/>`;
+  out += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#2b5b69" font-family="JetBrains Mono" font-size="13">where pangea was</text>`;
+  chains.forEach((c, i) => {
+    const a = -Math.PI / 2 + i / keys.length * Math.PI * 2;
+    const share = c.slice ? c.burned / c.slice : 0;
+    const k = Math.min(1, Math.sqrt(share / 0.05));                  // 5% of a chain burned = fully drifted
+    const drift = 150 + 90 * k;
+    const x = cx + Math.cos(a) * drift * 1.55, y = cy + Math.sin(a) * drift * .92;
+    const r = 80 - 16 * k;
+    const [label, color] = CH[c.chain] || [c.chain, '#ccc'];
+    out += `<g style="animation:bob ${6 + i}s ease-in-out ${i * .7}s infinite alternate">`;
+    out += `<path d="${blobPath(x + 6, y + 8, r, 7 + i * 101)}" fill="#04131a" opacity=".5"/>`;
+    out += `<path d="${blobPath(x, y, r, 7 + i * 101)}" fill="url(#ld)" stroke="#5a3b1c" stroke-width="2.5"/>`;
+    out += `<circle cx="${x}" cy="${y - r * .15}" r="7" fill="${color}" stroke="#06141b" stroke-width="2"/>`;
+    out += `<text x="${x}" y="${y + r * .2 + 4}" text-anchor="middle" fill="#2a1a0b" font-family="Space Grotesk" font-weight="700" font-size="17">${label}</text>`;
+    out += `<text x="${x}" y="${y + r * .2 + 24}" text-anchor="middle" fill="#3b2410" font-family="JetBrains Mono" font-size="13">🔥 ${fmt(c.burned)}</text>`;
+    out += '</g>';
+  });
+  out += '<style>@keyframes bob{from{transform:translateY(-3px)}to{transform:translateY(3px)}}@media (prefers-reduced-motion:reduce){g{animation:none!important}}</style>';
+  svg.innerHTML = out;
+}
+
+function drawChart(series) {
+  const el = document.getElementById('chart');
+  if (!series || series.length < 2) { el.innerHTML = '<text x="480" y="115" text-anchor="middle" fill="#86a3a6" font-family="Space Grotesk" font-size="15">The chart fills in as burns happen.</text>'; return; }
+  const W = 960, H = 220, pad = 28;
+  const t0 = Date.parse(series[0].t), t1 = Date.parse(series[series.length - 1].t) || t0 + 1;
+  const max = Math.max(...series.map(p => p.burned)) || 1;
+  const X = t => pad + (Date.parse(t) - t0) / (t1 - t0 || 1) * (W - pad * 2), Y = v => H - pad - v / max * (H - pad * 2);
+  const line = series.map((p, i) => `${i ? 'L' : 'M'}${X(p.t).toFixed(1)},${Y(p.burned).toFixed(1)}`).join(' ');
+  el.innerHTML = `<defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7a3d" stop-opacity=".35"/><stop offset="1" stop-color="#ff7a3d" stop-opacity="0"/></linearGradient></defs>
+    <line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#173540"/>
+    <path d="${line} L${X(series[series.length - 1].t)},${H - pad} L${pad},${H - pad}Z" fill="url(#fg)"/>
+    <path d="${line}" fill="none" stroke="#ff7a3d" stroke-width="3" vector-effect="non-scaling-stroke"/>
+    <text x="${pad}" y="18" fill="#86a3a6" font-family="JetBrains Mono" font-size="12">${fmt(max)} burned</text>
+    <text x="${W - pad}" y="${H - 8}" text-anchor="end" fill="#86a3a6" font-family="JetBrains Mono" font-size="12">${new Date(t1).toLocaleString()}</text>`;
+}
+
+async function load() {
+  let cfg = {}; try { cfg = await (await fetch('config.json?' + Date.now())).json(); } catch {}
+  document.getElementById('tk').textContent = cfg.ticker || 'DRIFT';
+  document.getElementById('share').textContent = cfg.burnShare || 50;
+  if (cfg.x) document.getElementById('xlink').href = cfg.x; else document.getElementById('xlink').style.display = 'none';
+  let d = null, series = [];
+  try { d = await (await fetch('data/latest.json?' + Date.now())).json(); } catch {}
+  try { series = await (await fetch('data/history.json?' + Date.now())).json(); } catch {}
+  if (!d) {
+    document.getElementById('updated').textContent = 'launching soon';
+    drawWorld(Object.keys(CH).map(c => ({ chain: c, burned: 0, slice: 1e9 })));
+    drawChart([]);
+    document.querySelector('#tbl tbody').innerHTML = '<tr><td colspan="5" class="empty">Live numbers appear here once the coin is launched.</td></tr>';
+    return;
+  }
+  if (d.slug) document.getElementById('buy').href = 'https://www.pangea.trade/app/t/' + encodeURIComponent(d.slug);
+  document.getElementById('updated').textContent = 'updated ' + ago(d.at);
+  document.getElementById('burned').textContent = fmt(d.burned);
+  document.getElementById('pct').textContent = d.burnedPct.toFixed(d.burnedPct < 1 ? 3 : 2) + '%';
+  document.getElementById('left').textContent = fmt(d.supplyNow);
+  document.getElementById('mc').textContent = usd(d.marketCapUsd);
+  document.getElementById('vol').textContent = usd(d.volume24hUsd);
+  drawWorld(d.chains);
+  drawChart(series);
+  document.querySelector('#tbl tbody').innerHTML = d.chains.map(c => { const [l, col] = CH[c.chain] || [c.chain, '#ccc'];
+    return `<tr><td><span class="dot" style="background:${col}"></span>${l}</td><td>${fmt(c.burned)}</td><td>${(c.burned / (c.slice || 1) * 100).toFixed(3)}%</td><td>${usd(c.volume24hUsd)}</td><td>${price(c.priceUsd)}</td></tr>`; }).join('');
+}
+load(); setInterval(load, 60_000);
+</script>
+</body>
+</html>
