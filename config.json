@@ -1,8 +1,12 @@
 {
-  "slug": "",
+  "slug": "drift",
   "name": "Drift",
   "ticker": "DRIFT",
   "burnShare": 50,
   "x": "https://x.com/driftcoinpangea",
-  "tweet": ""
+  "tweet": "",
+  "ca": {
+    "solana": "21psrnKxvmHHgALv8vM4imTv79fpB6fL98GAK7mdC6ea",
+    "evm": "0x36a0ff21ED15388dBBCCf3E3E9C52b0F643FE6EA"
+  }
 }
