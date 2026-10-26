@@ -1,58 +1,58 @@
 {
- "at": "2026-10-26T18:55:31.824Z",
+ "at": "2026-10-26T19:05:35.538Z",
  "slug": "drift",
  "name": "Drift",
  "ticker": "DRIFT",
  "degen": false,
  "totalSupply": 5000000000,
- "burned": 131067570.86709122,
- "burnedPct": 2.6213514173418244,
- "supplyNow": 4868932429.132909,
- "priceUsd": 0.000004562332419315274,
- "marketCapUsd": 22214,
- "volume24hUsd": 380805,
- "trades24h": 6482,
+ "burned": 132301747.49005578,
+ "burnedPct": 2.6460349498011158,
+ "supplyNow": 4867698252.509944,
+ "priceUsd": 0.000004559272875481343,
+ "marketCapUsd": 22193,
+ "volume24hUsd": 380791,
+ "trades24h": 6487,
  "listedAt": "2026-10-26T02:42:05.000Z",
  "chains": [
   {
    "chain": "solana",
-   "burned": 67364976.8079045,
+   "burned": 68599153.43086906,
    "slice": 1000000000,
-   "priceUsd": 0.00000467758,
-   "liquidityUsd": 4492.58719,
-   "volume24hUsd": 214178
+   "priceUsd": 0.0000045592729,
+   "liquidityUsd": 4395.4759,
+   "volume24hUsd": 214095
   },
   {
    "chain": "bsc",
    "burned": 19912276.07995237,
    "slice": 1000000000,
-   "priceUsd": 0.0000045623324,
-   "liquidityUsd": 4408.86017,
-   "volume24hUsd": 45430
+   "priceUsd": 0.0000045592813,
+   "liquidityUsd": 4405.9117,
+   "volume24hUsd": 45400
   },
   {
    "chain": "base",
    "burned": 22054675.604032066,
    "slice": 1000000000,
-   "priceUsd": 0.0000046102386,
-   "liquidityUsd": 4445.16957,
-   "volume24hUsd": 51851
+   "priceUsd": 0.0000046096859,
+   "liquidityUsd": 4444.63667,
+   "volume24hUsd": 51893
   },
   {
    "chain": "robinhood",
    "burned": 21735642.374438897,
    "slice": 1000000000,
-   "priceUsd": 0.000004651673,
-   "liquidityUsd": 4478.68855,
-   "volume24hUsd": 52736
+   "priceUsd": 0.0000046510271,
+   "liquidityUsd": 4478.08046,
+   "volume24hUsd": 52779
   },
   {
    "chain": "ethereum",
    "burned": 0.000763389,
    "slice": 1000000000,
-   "priceUsd": 0.0000049857111,
-   "liquidityUsd": 4743.63638,
-   "volume24hUsd": 16611
+   "priceUsd": 0.0000049851133,
+   "liquidityUsd": 4743.06768,
+   "volume24hUsd": 16624
   }
  ]
 }
