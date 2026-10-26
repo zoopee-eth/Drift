@@ -1,0 +1,58 @@
+{
+ "at": "2026-10-26T01:59:05.458Z",
+ "slug": "pi10",
+ "name": "Pangea Index 10",
+ "ticker": "PI10",
+ "degen": false,
+ "totalSupply": 5000000000,
+ "burned": 0.002217134,
+ "burnedPct": 4.4342679999999995e-11,
+ "supplyNow": 4999999999.997783,
+ "priceUsd": 0.00001742242911225953,
+ "marketCapUsd": 87112,
+ "volume24hUsd": 381030,
+ "trades24h": 4843,
+ "listedAt": "2026-10-25T21:12:37.000Z",
+ "chains": [
+  {
+   "chain": "solana",
+   "burned": 0,
+   "slice": 1000000000,
+   "priceUsd": 0.000017422429,
+   "liquidityUsd": 12097.8301,
+   "volume24hUsd": 129982
+  },
+  {
+   "chain": "bsc",
+   "burned": 0.000210152,
+   "slice": 1000000000,
+   "priceUsd": 0.000017422559,
+   "liquidityUsd": 12127.0703,
+   "volume24hUsd": 62992
+  },
+  {
+   "chain": "base",
+   "burned": 0.000668994,
+   "slice": 1000000000,
+   "priceUsd": 0.000017775119,
+   "liquidityUsd": 12219.5873,
+   "volume24hUsd": 52970
+  },
+  {
+   "chain": "robinhood",
+   "burned": 0.000668994,
+   "slice": 1000000000,
+   "priceUsd": 0.000018180396,
+   "liquidityUsd": 12397.283800000001,
+   "volume24hUsd": 101483
+  },
+  {
+   "chain": "ethereum",
+   "burned": 0.000668994,
+   "slice": 1000000000,
+   "priceUsd": 0.000017843591,
+   "liquidityUsd": 12249.7503,
+   "volume24hUsd": 33603
+  }
+ ]
+}
