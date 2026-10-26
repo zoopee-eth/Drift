@@ -31,7 +31,8 @@ Pangea was one supercontinent. Then it drifted apart.
 | **Burn** | 50% of the creator fee share → buy & burn, enforced by Pangea's on-chain vault |
 | **Dev allocation** | None: all supply went into the pools at launch |
 | **Liquidity** | Locked on every chain |
-| **Contract** | _added at launch_ |
+| **Contract (Solana)** | `21psrnKxvmHHgALv8vM4imTv79fpB6fL98GAK7mdC6ea` |
+| **Contract (EVM: ETH · Base · BSC · Robinhood)** | `0x36a0ff21ED15388dBBCCf3E3E9C52b0F643FE6EA` |
 
 ## The live tracker
 
@@ -54,6 +55,6 @@ Everything on the site comes straight from Pangea's public data. Nothing is type
 
 - 🌐 Site: https://driftcoin.fun
 - 𝕏 X: https://x.com/driftcoinpangea
-- 🌍 Pangea: _coin page added at launch_
+- 🌍 Pangea: https://www.pangea.trade/app/t/0x36a0ff21ED15388dBBCCf3E3E9C52b0F643FE6EA
 
 <sub>Not financial advice. Memecoins are risky and can go to zero.</sub>
