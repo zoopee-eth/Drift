@@ -185,7 +185,7 @@ function drawWorld(chains, opts = {}) {
     out += `<path d="${blobPath(x, y, r, 7 + i * 101)}" fill="url(#ld)" stroke="#5a3b1c" stroke-width="2.5"/>`;
     out += `<circle cx="${x}" cy="${y - r * .15}" r="7" fill="${color}" stroke="#06141b" stroke-width="2"/>`;
     out += `<text x="${x}" y="${y + r * .2 + 4}" text-anchor="middle" fill="#2a1a0b" font-family="Space Grotesk" font-weight="700" font-size="17">${label}</text>`;
-    out += `<text x="${x}" y="${y + r * .2 + 24}" text-anchor="middle" fill="#3b2410" font-family="JetBrains Mono" font-size="13">${k === 0 ? 'still attached 🫠' : '🔥 ' + fmt(c.burned)}</text>`;
+    out += `<text x="${x}" y="${y + r * .2 + 24}" text-anchor="middle" fill="#3b2410" font-family="JetBrains Mono" font-size="${k === 0 ? 11 : 13}">${k === 0 ? 'still attached 🫠' : '🔥 ' + fmt(c.burned)}</text>`;
     out += '</g>';
   });
   if (opts.clock) out += `<text x="985" y="545" text-anchor="end" fill="#86a3a6" font-family="JetBrains Mono" font-size="14">${opts.clock}</text>`;
