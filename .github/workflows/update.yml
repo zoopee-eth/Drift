@@ -1,7 +1,7 @@
 name: update-stats
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '7 * * * *'      # hourly safety net: restarts the loop if it ever stops
   workflow_dispatch: {}
 permissions:
   contents: write
@@ -9,15 +9,22 @@ concurrency: { group: update-stats, cancel-in-progress: false }
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - run: node fetch.mjs
-      - name: Commit new numbers
+      - name: Update every 10 minutes for ~5h45m
         run: |
           git config user.name "stats-bot"
           git config user.email "stats-bot@users.noreply.github.com"
-          git add data || true
-          git diff --cached --quiet || git commit -m "update stats"
-          git push
+          for i in $(seq 1 34); do
+            git pull --rebase --quiet origin main || true
+            node fetch.mjs || echo "fetch failed, will retry"
+            git add data || true
+            if ! git diff --cached --quiet; then
+              git commit -m "update stats" --quiet
+              git push --quiet || (git pull --rebase --quiet origin main && git push --quiet) || true
+            fi
+            [ "$i" -lt 34 ] && sleep 600
+          done
