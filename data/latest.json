@@ -1,58 +1,58 @@
 {
- "at": "2026-10-26T11:28:26.918Z",
+ "at": "2026-10-26T11:38:29.491Z",
  "slug": "drift",
  "name": "Drift",
  "ticker": "DRIFT",
  "degen": false,
  "totalSupply": 5000000000,
- "burned": 114442959.97690715,
- "burnedPct": 2.288859199538143,
- "supplyNow": 4885557040.023093,
- "priceUsd": 0.0000072303320867889,
- "marketCapUsd": 35324,
- "volume24hUsd": 354823,
- "trades24h": 5635,
+ "burned": 115201402.90843743,
+ "burnedPct": 2.3040280581687487,
+ "supplyNow": 4884798597.091562,
+ "priceUsd": 0.00000731710783330697,
+ "marketCapUsd": 35743,
+ "volume24hUsd": 355369,
+ "trades24h": 5647,
  "listedAt": "2026-10-26T02:42:05.000Z",
  "chains": [
   {
    "chain": "solana",
-   "burned": 59610260.27978821,
+   "burned": 60368703.21131849,
    "slice": 1000000000,
-   "priceUsd": 0.0000072303321,
-   "liquidityUsd": 6329.1586,
-   "volume24hUsd": 200027
+   "priceUsd": 0.0000073171078,
+   "liquidityUsd": 6383.734200000001,
+   "volume24hUsd": 200359
   },
   {
    "chain": "bsc",
    "burned": 16271265.50310972,
    "slice": 1000000000,
-   "priceUsd": 0.0000073869354,
-   "liquidityUsd": 6429.3343,
-   "volume24hUsd": 41026
+   "priceUsd": 0.0000075176306,
+   "liquidityUsd": 6514.6587,
+   "volume24hUsd": 41112
   },
   {
    "chain": "base",
    "burned": 18919511.115528803,
    "slice": 1000000000,
-   "priceUsd": 0.0000074318545,
-   "liquidityUsd": 6470.058300000001,
-   "volume24hUsd": 48333
+   "priceUsd": 0.0000074632034,
+   "liquidityUsd": 6490.764499999999,
+   "volume24hUsd": 48419
   },
   {
    "chain": "robinhood",
    "burned": 19641923.077717017,
    "slice": 1000000000,
-   "priceUsd": 0.0000072756104,
-   "liquidityUsd": 6369.4907,
-   "volume24hUsd": 49738
+   "priceUsd": 0.0000073310275,
+   "liquidityUsd": 6405.922500000001,
+   "volume24hUsd": 49774
   },
   {
    "chain": "ethereum",
    "burned": 0.000763389,
    "slice": 1000000000,
-   "priceUsd": 0.0000074479457,
-   "liquidityUsd": 6480.3552,
-   "volume24hUsd": 15699
+   "priceUsd": 0.0000074507839,
+   "liquidityUsd": 6482.824699999999,
+   "volume24hUsd": 15705
   }
  ]
 }
