@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="$DRIFT: the continents are drifting" width="100%">
+  <img src="banner.png" alt="$DRIFT: the continents are drifting" width="100%">
 </p>
 
 <h1 align="center">$DRIFT</h1>
