@@ -38,6 +38,11 @@ td:first-child{font-family:'Space Grotesk',sans-serif;font-weight:500}
 .how .n{font:700 13px 'JetBrains Mono',monospace;color:var(--ember)}
 footer{color:var(--mut);font-size:13px;margin-top:34px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .chart{width:100%;height:auto;display:block}
+.cas{display:grid;gap:8px;margin:4px 0 8px}
+.ca{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.ca .lab{color:var(--mut);font-size:13px;white-space:nowrap}
+.ca code{font:600 13px 'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.ca button{background:var(--ember);color:#1a0b03;border:0;border-radius:8px;padding:6px 12px;font:700 13px 'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap}
 .empty{color:var(--mut);padding:24px;text-align:center}
 @media (max-width:560px){.links a{margin:6px 6px 0 0}.card .v{font-size:20px}}
 </style>
@@ -65,7 +70,9 @@ footer{color:var(--mut);font-size:13px;margin-top:34px;display:flex;justify-cont
     <div class="card"><div class="k">24h volume</div><div class="v" id="vol">-</div></div>
   </div>
 
-  <h2>Burned over time</h2>
+  <div class="cas" id="cas" hidden></div>
+
+<h2>Burned over time</h2>
   <div class="panel"><svg class="chart" id="chart" viewBox="0 0 960 220" preserveAspectRatio="none"></svg></div>
 
   <h2>Continent by continent</h2>
@@ -149,6 +156,19 @@ async function load() {
   document.getElementById('tk').textContent = cfg.ticker || 'DRIFT';
   document.getElementById('share').textContent = cfg.burnShare || 50;
   if (cfg.x) document.getElementById('xlink').href = cfg.x; else document.getElementById('xlink').style.display = 'none';
+  // contract addresses: cfg.ca = { solana, evm } or per chain
+  const ca = cfg.ca || {}, rows = [];
+  const label = { solana: 'Solana', evm: 'EVM', ethereum: 'Ethereum', base: 'Base', bsc: 'BSC', robinhood: 'Robinhood' };
+  for (const k of ['solana', 'evm', 'ethereum', 'base', 'bsc', 'robinhood']) if (ca[k]) rows.push([label[k], ca[k]]);
+  const box = document.getElementById('cas');
+  if (rows.length) {
+    box.hidden = false;
+    box.innerHTML = rows.map(([l]) => '<div class="ca"><span class="lab">CA · ' + l + '</span><code></code><button type="button">Copy</button></div>').join('');
+    box.querySelectorAll('.ca').forEach((el, i) => {
+      el.querySelector('code').textContent = rows[i][1];
+      el.querySelector('button').onclick = async e => { try { await navigator.clipboard.writeText(rows[i][1]); e.target.textContent = 'Copied'; setTimeout(() => e.target.textContent = 'Copy', 1500); } catch {} };
+    });
+  }
   let d = null, series = [];
   try { d = await (await fetch('data/latest.json?' + Date.now())).json(); } catch {}
   try { series = await (await fetch('data/history.json?' + Date.now())).json(); } catch {}
