@@ -43,6 +43,12 @@ footer{color:var(--mut);font-size:13px;margin-top:34px;display:flex;justify-cont
 .ca .lab{color:var(--mut);font-size:13px;white-space:nowrap}
 .ca code{font:600 13px 'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 .ca button{background:var(--ember);color:#1a0b03;border:0;border-radius:8px;padding:6px 12px;font:700 13px 'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap}
+.replay{flex:none;background:var(--ember);color:#1a0b03;border:0;border-radius:999px;padding:7px 14px;font:700 13px 'Space Grotesk',sans-serif;cursor:pointer}
+.replay:disabled{opacity:.5;cursor:default}
+.meter{display:flex;align-items:center;gap:14px;padding:12px 16px;border-top:1px solid var(--line);background:rgba(6,20,27,.6)}
+.meter .mt{flex:1;min-width:0}.meter .bar{height:8px;background:#0b2630;border-radius:99px;overflow:hidden}
+.meter .fill{height:100%;width:2%;background:linear-gradient(90deg,#ff9a5c,var(--ember));border-radius:99px;transition:width .6s}
+.meter .txt{font:12px 'JetBrains Mono',monospace;color:var(--mut);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .empty{color:var(--mut);padding:24px;text-align:center}
 @media (max-width:560px){.links a{margin:6px 6px 0 0}.card .v{font-size:20px}}
 </style>
@@ -55,11 +61,12 @@ footer{color:var(--mut);font-size:13px;margin-top:34px;display:flex;justify-cont
   </header>
 
   <h1>Pangea is breaking apart.<br><em>Every trade sets it drifting.</em></h1>
-  <p class="lede">$DRIFT lives on five chains at once. Every trade on any of them pays a fee, and half of the creator's share is spent buying DRIFT and burning it, on every chain, about every 15 minutes. The more a chain trades, the further its continent drifts.</p>
+  <p class="lede">$DRIFT lives on five chains at once. Every trade on any of them pays a fee, and half of the creator's share is spent buying DRIFT and burning it, on every chain, about every 15 minutes. The more a chain burns, the further its continent drifts from where Pangea was.</p>
 
   <div class="map">
     <div class="badge" id="updated">loading…</div>
     <svg id="world" viewBox="0 0 1000 560" role="img" aria-label="Five continents, one per chain, drifting apart as DRIFT is burned"></svg>
+    <div class="meter" id="meter"><div class="mt"><div class="bar"><div class="fill"></div></div><div class="txt">&nbsp;</div></div><button class="replay" id="replay" type="button" onclick="replay()">▶ Replay the drift</button></div>
   </div>
 
   <div class="cards">
@@ -108,31 +115,80 @@ function blobPath(cx, cy, r, seed) {
   return d + 'Z';
 }
 
-function drawWorld(chains) {
+// Each continent's distance from where Pangea was = how much of its chain's slice has burned.
+// Log scale: 0.01% burned = still attached, 10% burned = drifted all the way out.
+const driftK = (burned, slice) => { const pct = slice ? burned / slice * 100 : 0; return pct <= 0.01 ? 0 : Math.min(1, Math.log10(pct / 0.01) / 3); };
+const MILESTONES = [0.1, 0.25, 0.5, 1, 2, 3, 5, 7.5, 10, 15, 20, 30, 50];
+
+function drawWorld(chains, opts = {}) {
   const svg = document.getElementById('world');
-  const cx = 500, cy = 280, keys = chains.map(c => c.chain);
-  let out = '<defs><radialGradient id="ld" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#e8bd72"/><stop offset="1" stop-color="#a86f33"/></radialGradient></defs>';
-  // faint "Pangea" outline where they all started
-  out += `<circle cx="${cx}" cy="${cy}" r="120" fill="none" stroke="#1e4552" stroke-dasharray="4 8"/>`;
-  out += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#2b5b69" font-family="JetBrains Mono" font-size="13">where pangea was</text>`;
+  const cx = 500, cy = 280, n = chains.length;
+  const total = chains.reduce((a, c) => a + (c.burned || 0), 0), supply = chains.reduce((a, c) => a + (c.slice || 0), 0) || 5e9;
+  const tp = total / supply * 100;
+  const avgK = chains.reduce((a, c) => a + driftK(c.burned, c.slice), 0) / (n || 1);
+  let out = '<defs><radialGradient id="ld" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#e8bd72"/><stop offset="1" stop-color="#a86f33"/></radialGradient>'
+    + '<radialGradient id="rift"><stop offset="0" stop-color="#ffb070" stop-opacity=".95"/><stop offset=".45" stop-color="#ff7a3d" stop-opacity=".55"/><stop offset="1" stop-color="#ff7a3d" stop-opacity="0"/></radialGradient></defs>';
+  // the rift glows hotter and wider as more burns
+  const glow = 40 + 150 * avgK;
+  out += `<circle cx="${cx}" cy="${cy}" r="${glow}" fill="url(#rift)" opacity="${0.25 + 0.6 * avgK}"/>`;
+  out += `<circle cx="${cx}" cy="${cy}" r="120" fill="none" stroke="#2b5b69" stroke-dasharray="4 8"/>`;
+  // cracks from the centre to each continent
   chains.forEach((c, i) => {
-    const a = -Math.PI / 2 + i / keys.length * Math.PI * 2;
-    const share = c.slice ? c.burned / c.slice : 0;
-    const k = Math.min(1, Math.sqrt(share / 0.05));                  // 5% of a chain burned = fully drifted
-    const drift = 150 + 90 * k;
-    const x = cx + Math.cos(a) * drift * 1.55, y = cy + Math.sin(a) * drift * .92;
-    const r = 80 - 16 * k;
+    const a = -Math.PI / 2 + i / n * Math.PI * 2, k = driftK(c.burned, c.slice), d = 100 + 150 * k;
+    if (k > 0) out += `<line x1="${cx}" y1="${cy}" x2="${cx + Math.cos(a) * d * 1.55}" y2="${cy + Math.sin(a) * d * .85}" stroke="#ff7a3d" stroke-opacity=".55" stroke-width="2.5" stroke-dasharray="3 7"/>`;
+  });
+  out += `<text x="${cx}" y="${cy - 6}" text-anchor="middle" fill="#ffe2cc" font-family="JetBrains Mono" font-weight="600" font-size="22">${tp.toFixed(tp < 1 ? 2 : 1)}%</text>`;
+  out += `<text x="${cx}" y="${cy + 16}" text-anchor="middle" fill="#ffd2b0" font-family="JetBrains Mono" font-size="12">of supply burned</text>`;
+  chains.forEach((c, i) => {
+    const a = -Math.PI / 2 + i / n * Math.PI * 2, k = driftK(c.burned, c.slice);
+    const d = 100 + 150 * k;                       // 60 = touching in the middle, 250 = fully drifted
+    const x = cx + Math.cos(a) * d * 1.55, y = cy + Math.sin(a) * d * .85;
+    const r = 78 - 14 * k;
     const [label, color] = CH[c.chain] || [c.chain, '#ccc'];
-    out += `<g style="animation:bob ${6 + i}s ease-in-out ${i * .7}s infinite alternate">`;
+    out += `<g${opts.still ? '' : ` style="animation:bob ${6 + i}s ease-in-out ${i * .7}s infinite alternate"`}>`;
     out += `<path d="${blobPath(x + 6, y + 8, r, 7 + i * 101)}" fill="#04131a" opacity=".5"/>`;
     out += `<path d="${blobPath(x, y, r, 7 + i * 101)}" fill="url(#ld)" stroke="#5a3b1c" stroke-width="2.5"/>`;
     out += `<circle cx="${x}" cy="${y - r * .15}" r="7" fill="${color}" stroke="#06141b" stroke-width="2"/>`;
     out += `<text x="${x}" y="${y + r * .2 + 4}" text-anchor="middle" fill="#2a1a0b" font-family="Space Grotesk" font-weight="700" font-size="17">${label}</text>`;
-    out += `<text x="${x}" y="${y + r * .2 + 24}" text-anchor="middle" fill="#3b2410" font-family="JetBrains Mono" font-size="13">🔥 ${fmt(c.burned)}</text>`;
+    out += `<text x="${x}" y="${y + r * .2 + 24}" text-anchor="middle" fill="#3b2410" font-family="JetBrains Mono" font-size="13">${k === 0 ? 'still attached 🫠' : '🔥 ' + fmt(c.burned)}</text>`;
     out += '</g>';
   });
+  if (opts.clock) out += `<text x="985" y="545" text-anchor="end" fill="#86a3a6" font-family="JetBrains Mono" font-size="14">${opts.clock}</text>`;
   out += '<style>@keyframes bob{from{transform:translateY(-3px)}to{transform:translateY(3px)}}@media (prefers-reduced-motion:reduce){g{animation:none!important}}</style>';
   svg.innerHTML = out;
+  // milestone meter
+  const next = MILESTONES.find(m => m > tp) || 100, prev = [...MILESTONES].reverse().find(m => m <= tp) || 0;
+  const m = document.getElementById('meter');
+  if (m) {
+    m.querySelector('.fill').style.width = Math.max(2, (tp - prev) / (next - prev) * 100) + '%';
+    m.querySelector('.txt').textContent = `next milestone: ${next}% burned · ${fmt(total)} / ${fmt(supply * next / 100)}`;
+  }
+}
+
+// Time-lapse: replays history.json from launch (nothing burned) to now.
+let replaying = false, lastData = null, lastSeries = [];
+function replay(ms = 5000) {
+  if (!lastData || replaying) return;
+  const keys = lastData.chains.map(c => c.chain), slice = Object.fromEntries(lastData.chains.map(c => [c.chain, c.slice]));
+  const t0 = Date.parse(lastData.listedAt || (lastSeries[0] && lastSeries[0].t) || lastData.at);
+  const pts = [{ t: t0, by: Object.fromEntries(keys.map(k => [k, 0])) }]
+    .concat(lastSeries.filter(p => p.byChain).map(p => ({ t: Date.parse(p.t), by: p.byChain })))
+    .concat([{ t: Date.parse(lastData.at), by: Object.fromEntries(lastData.chains.map(c => [c.chain, c.burned])) }])
+    .sort((a, b) => a.t - b.t);
+  const T1 = pts[pts.length - 1].t; if (!(T1 > t0)) return;
+  replaying = true; const start = performance.now();
+  const btn = document.getElementById('replay'); if (btn) btn.disabled = true;
+  const frame = now => {
+    const f = Math.min(1, (now - start) / ms), e = f < .5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2;
+    const t = t0 + (T1 - t0) * e;
+    let j = pts.findIndex(p => p.t >= t); if (j <= 0) j = 1;
+    const A = pts[j - 1], B = pts[j], u = B.t > A.t ? (t - A.t) / (B.t - A.t) : 1;
+    const chains = keys.map(k => ({ chain: k, slice: slice[k], burned: (A.by[k] || 0) + ((B.by[k] || 0) - (A.by[k] || 0)) * u }));
+    const hrs = (t - t0) / 3600e3;
+    drawWorld(chains, { still: true, clock: hrs < 1 ? `launch + ${Math.round(hrs * 60)} min` : `launch + ${hrs.toFixed(1)} h` });
+    if (f < 1) requestAnimationFrame(frame); else { replaying = false; if (btn) btn.disabled = false; drawWorld(lastData.chains); }
+  };
+  requestAnimationFrame(frame);
 }
 
 function drawChart(series) {
@@ -186,7 +242,8 @@ async function load() {
   document.getElementById('left').textContent = fmt(d.supplyNow);
   document.getElementById('mc').textContent = usd(d.marketCapUsd);
   document.getElementById('vol').textContent = usd(d.volume24hUsd);
-  drawWorld(d.chains);
+  const first = !lastData; lastData = d; lastSeries = series;
+  if (!replaying) { if (first) replay(4500); else drawWorld(d.chains); }
   drawChart(series);
   document.querySelector('#tbl tbody').innerHTML = d.chains.map(c => { const [l, col] = CH[c.chain] || [c.chain, '#ccc'];
     return `<tr><td><span class="dot" style="background:${col}"></span>${l}</td><td>${fmt(c.burned)}</td><td>${(c.burned / (c.slice || 1) * 100).toFixed(3)}%</td><td>${usd(c.volume24hUsd)}</td><td>${price(c.priceUsd)}</td></tr>`; }).join('');
