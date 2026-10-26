@@ -1,58 +1,58 @@
 {
- "at": "2026-10-26T03:37:15.867Z",
+ "at": "2026-10-26T03:47:19.299Z",
  "slug": "drift",
  "name": "Drift",
  "ticker": "DRIFT",
  "degen": false,
  "totalSupply": 5000000000,
- "burned": 39244994.21493245,
- "burnedPct": 0.7848998842986489,
- "supplyNow": 4960755005.785068,
- "priceUsd": 0.000010475055270920377,
- "marketCapUsd": 51964,
- "volume24hUsd": 180981,
- "trades24h": 2792,
+ "burned": 47074454.123451516,
+ "burnedPct": 0.9414890824690303,
+ "supplyNow": 4952925545.876549,
+ "priceUsd": 0.000010451737734468767,
+ "marketCapUsd": 51767,
+ "volume24hUsd": 192890,
+ "trades24h": 2978,
  "listedAt": "2026-10-26T02:42:05.000Z",
  "chains": [
   {
    "chain": "solana",
-   "burned": 7986263.33800477,
+   "burned": 10334521.068799768,
    "slice": 1000000000,
-   "priceUsd": 0.000011080665,
-   "liquidityUsd": 8529.251,
-   "volume24hUsd": 95340
+   "priceUsd": 0.000010451738,
+   "liquidityUsd": 8193.4804,
+   "volume24hUsd": 102914
   },
   {
    "chain": "bsc",
-   "burned": 10223359.82762852,
+   "burned": 11120966.389406051,
    "slice": 1000000000,
-   "priceUsd": 0.00001081278,
-   "liquidityUsd": 8405.1664,
-   "volume24hUsd": 21631
+   "priceUsd": 0.000010531321,
+   "liquidityUsd": 8254.2317,
+   "volume24hUsd": 22821
   },
   {
    "chain": "base",
-   "burned": 10473666.685527656,
+   "burned": 12752241.54274018,
    "slice": 1000000000,
-   "priceUsd": 0.000010848601,
-   "liquidityUsd": 8427.622,
-   "volume24hUsd": 28182
+   "priceUsd": 0.000010699244,
+   "liquidityUsd": 8343.1628,
+   "volume24hUsd": 29408
   },
   {
    "chain": "robinhood",
-   "burned": 10561704.363008117,
+   "burned": 12866725.121742131,
    "slice": 1000000000,
-   "priceUsd": 0.000010814455,
-   "liquidityUsd": 8409.592400000001,
-   "volume24hUsd": 28053
+   "priceUsd": 0.000010589744,
+   "liquidityUsd": 8284.897500000001,
+   "volume24hUsd": 29270
   },
   {
    "chain": "ethereum",
    "burned": 0.000763389,
    "slice": 1000000000,
-   "priceUsd": 0.000010475055,
-   "liquidityUsd": 8228.812399999999,
-   "volume24hUsd": 7775
+   "priceUsd": 0.000011354974,
+   "liquidityUsd": 8686.0061,
+   "volume24hUsd": 8478
   }
  ]
 }
