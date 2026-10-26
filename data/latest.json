@@ -1,58 +1,58 @@
 {
- "at": "2026-10-26T13:59:21.506Z",
+ "at": "2026-10-26T14:09:24.963Z",
  "slug": "drift",
  "name": "Drift",
  "ticker": "DRIFT",
  "degen": false,
  "totalSupply": 5000000000,
- "burned": 121034441.7495771,
- "burnedPct": 2.4206888349915423,
- "supplyNow": 4878965558.2504225,
- "priceUsd": 0.000005680646055226177,
- "marketCapUsd": 27716,
- "volume24hUsd": 364187,
- "trades24h": 6050,
+ "burned": 122092299.81898054,
+ "burnedPct": 2.441845996379611,
+ "supplyNow": 4877907700.18102,
+ "priceUsd": 0.000005577991889209063,
+ "marketCapUsd": 27209,
+ "volume24hUsd": 365226,
+ "trades24h": 6061,
  "listedAt": "2026-10-26T02:42:05.000Z",
  "chains": [
   {
    "chain": "solana",
-   "burned": 63470007.41387354,
+   "burned": 63988378.28405933,
    "slice": 1000000000,
-   "priceUsd": 0.0000056806461,
-   "liquidityUsd": 5256.73,
-   "volume24hUsd": 205944
+   "priceUsd": 0.0000055779919,
+   "liquidityUsd": 5183.4698,
+   "volume24hUsd": 206707
   },
   {
    "chain": "bsc",
    "burned": 17356519.740229655,
    "slice": 1000000000,
-   "priceUsd": 0.0000058048719,
-   "liquidityUsd": 5352.8495,
-   "volume24hUsd": 42824
+   "priceUsd": 0.0000057928819,
+   "liquidityUsd": 5345.6664,
+   "volume24hUsd": 42953
   },
   {
    "chain": "base",
    "burned": 19987573.2075122,
    "slice": 1000000000,
-   "priceUsd": 0.000005781452,
-   "liquidityUsd": 5332.1805,
-   "volume24hUsd": 49010
+   "priceUsd": 0.0000057875223,
+   "liquidityUsd": 5337.7792,
+   "volume24hUsd": 49070
   },
   {
    "chain": "robinhood",
-   "burned": 20220341.387198333,
+   "burned": 20759828.586415965,
    "slice": 1000000000,
-   "priceUsd": 0.0000057873763,
-   "liquidityUsd": 5336.4523,
-   "volume24hUsd": 50416
+   "priceUsd": 0.0000057295711,
+   "liquidityUsd": 5295.8774,
+   "volume24hUsd": 50480
   },
   {
    "chain": "ethereum",
    "burned": 0.000763389,
    "slice": 1000000000,
-   "priceUsd": 0.0000058827262,
-   "liquidityUsd": 5404.9061,
-   "volume24hUsd": 15992
+   "priceUsd": 0.0000058751,
+   "liquidityUsd": 5400.7062,
+   "volume24hUsd": 16016
   }
  ]
 }
