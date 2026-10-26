@@ -1,17 +1,59 @@
-# $DRIFT stats page
+<p align="center">
+  <img src="assets/banner.png" alt="$DRIFT: the continents are drifting" width="100%">
+</p>
 
-A live burn tracker for $DRIFT on Pangea. A GitHub job reads Pangea's numbers about every
-10 minutes and saves them in `data/`; GitHub Pages shows `index.html`.
+<h1 align="center">$DRIFT</h1>
 
-## Setup (once)
-1. Create a free GitHub account, then a new **public** repo (e.g. `drift`).
-2. Upload everything in this folder (keep the `.github` folder; it holds the scheduled job).
-3. Repo **Settings → Pages** → Source: "Deploy from a branch", Branch: `main`, folder `/ (root)` → Save.
-   Your page: `https://<your-username>.github.io/drift/`
-4. Repo **Settings → Actions → General** → Workflow permissions: "Read and write" → Save.
+<p align="center">
+  <b>One coin on five chains. Every trade buys back and burns it.</b><br>
+  Live burn tracker → <a href="https://driftcoin.fun"><b>driftcoin.fun</b></a> · <a href="https://x.com/driftcoinpangea">@driftcoinpangea</a>
+</p>
 
-## After you launch the coin
-1. Find its slug: the coin page URL on Pangea is `pangea.trade/app/t/<address>`; the slug is the short name
-   Pangea uses (e.g. `drift` or `drift-ab12cd`). Easiest: tell Claude the coin page link.
-2. Edit `config.json` on GitHub: set `"slug"`, and `"x"` to your X account link. Commit.
-3. **Actions** tab → "update-stats" → **Run workflow** to fill the page right away.
+<p align="center">
+  <img alt="chains" src="https://img.shields.io/badge/chains-Solana%20%C2%B7%20BSC%20%C2%B7%20Base%20%C2%B7%20Robinhood%20%C2%B7%20Ethereum-0a2633?style=flat-square">
+  <img alt="burn" src="https://img.shields.io/badge/creator%20fees-50%25%20burned-ff7a3d?style=flat-square">
+  <img alt="dev bag" src="https://img.shields.io/badge/dev%20bag-none-22c55e?style=flat-square">
+  <img alt="stats" src="https://img.shields.io/github/actions/workflow/status/zoopee-eth/Drift/update.yml?label=stats%20bot&style=flat-square">
+</p>
+
+---
+
+## What is $DRIFT?
+
+Pangea was one supercontinent. Then it drifted apart.
+
+**$DRIFT** launched on [Pangea](https://www.pangea.trade) on all five of its chains at once. Each chain is a continent. Every trade on any chain pays a 1% fee, and **half of the creator's share is automatically spent buying $DRIFT and burning it**, on that chain, about every 15 minutes. The more a chain trades, the further its continent drifts.
+
+| | |
+|---|---|
+| **Chains** | Solana · BSC · Base · Robinhood Chain · Ethereum |
+| **Trading fee** | 1%, fixed at launch |
+| **Burn** | 50% of the creator fee share → buy & burn, enforced by Pangea's on-chain vault |
+| **Dev allocation** | None: all supply went into the pools at launch |
+| **Liquidity** | Locked on every chain |
+| **Contract** | _added at launch_ |
+
+## The live tracker
+
+[**driftcoin.fun**](https://driftcoin.fun) shows, live:
+
+- 🔥 total DRIFT burned and % of supply
+- 🌍 a map where each chain's continent drifts further out as it burns more
+- 📈 burns over time
+- 📊 per-chain burns, 24h volume and price
+
+## Open and checkable
+
+Everything on the site comes straight from Pangea's public data. Nothing is typed in by hand.
+
+- [`fetch.mjs`](fetch.mjs) reads Pangea every ~10 minutes ([`.github/workflows/update.yml`](.github/workflows/update.yml))
+- the raw numbers are committed to [`data/`](data), so every update is in the commit history
+- burns can be checked on-chain on each chain's explorer
+
+## Links
+
+- 🌐 Site: https://driftcoin.fun
+- 𝕏 X: https://x.com/driftcoinpangea
+- 🌍 Pangea: _coin page added at launch_
+
+<sub>Not financial advice. Memecoins are risky and can go to zero.</sub>
