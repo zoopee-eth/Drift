@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>$DRIFT · the continents are drifting</title>
 <meta name="description" content="Live burn tracker for $DRIFT on Pangea: every trade on every chain buys back and burns DRIFT.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://driftcoin.fun/">
+<meta property="og:title" content="$DRIFT · the continents are drifting">
+<meta property="og:description" content="One coin on 5 chains. Every trade buys back and burns DRIFT. Watch Pangea break apart live.">
+<meta property="og:image" content="https://driftcoin.fun/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@driftcoinpangea">
+<meta name="twitter:title" content="$DRIFT · the continents are drifting">
+<meta name="twitter:description" content="One coin on 5 chains. Every trade buys back and burns DRIFT. Watch Pangea break apart live.">
+<meta name="twitter:image" content="https://driftcoin.fun/social-preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -49,6 +59,15 @@ footer{color:var(--mut);font-size:13px;margin-top:34px;display:flex;justify-cont
 .meter .mt{flex:1;min-width:0}.meter .bar{height:8px;background:#0b2630;border-radius:99px;overflow:hidden}
 .meter .fill{height:100%;width:2%;background:linear-gradient(90deg,#ff9a5c,var(--ember));border-radius:99px;transition:width .6s}
 .meter .txt{font:12px 'JetBrains Mono',monospace;color:var(--mut);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:18px}
+.calc label{color:var(--mut);font-size:13px;display:block;margin-bottom:6px}
+.calc .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.calc input{width:120px;background:#06141b;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:8px 10px;font:600 18px 'JetBrains Mono',monospace}
+.calc .out{font:600 22px 'JetBrains Mono',monospace;color:var(--ember)}
+.calc .q{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.calc .q button,.btn2{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:5px 12px;font:600 13px 'Space Grotesk',sans-serif;cursor:pointer}
+.calc .note,.share .note{color:var(--mut);font-size:12px;margin-top:10px}
+.share .btn{background:var(--ember);color:#1a0b03;border:0;border-radius:999px;padding:10px 18px;font:700 15px 'Space Grotesk',sans-serif;cursor:pointer;margin-top:10px}
 .empty{color:var(--mut);padding:24px;text-align:center}
 @media (max-width:560px){.links a{margin:6px 6px 0 0}.card .v{font-size:20px}}
 </style>
@@ -78,6 +97,22 @@ footer{color:var(--mut);font-size:13px;margin-top:34px;display:flex;justify-cont
   </div>
 
   <div class="cas" id="cas" hidden></div>
+
+  <div class="tools">
+    <div class="card calc">
+      <label for="amt">If you trade…</label>
+      <div class="row"><span style="font:600 18px 'JetBrains Mono',monospace">$</span><input id="amt" type="number" min="1" value="100" inputmode="decimal"><span style="color:var(--mut)">→ burns about</span></div>
+      <div class="out" id="burnOut">-</div>
+      <div class="q"><button type="button" data-v="25">$25</button><button type="button" data-v="100">$100</button><button type="button" data-v="500">$500</button><button type="button" data-v="1000">$1K</button></div>
+      <div class="note">Buys and sells both burn. Estimate at today's price: about <span id="ratePct">0.44</span>% of every trade ends up buying and burning DRIFT, in the next burn round.</div>
+    </div>
+    <div class="card share">
+      <b>Share the burn</b>
+      <p style="margin:6px 0 0;color:var(--mut);font-size:14px">Save a ready-to-post image of the map with today's numbers.</p>
+      <button class="btn" id="dl" type="button">⬇ Download burn card</button>
+      <div class="note">1200 × 675, sized for X.</div>
+    </div>
+  </div>
 
 <h2>Burned over time</h2>
   <div class="panel"><svg class="chart" id="chart" viewBox="0 0 960 220" preserveAspectRatio="none"></svg></div>
@@ -191,6 +226,49 @@ function replay(ms = 5000) {
   requestAnimationFrame(frame);
 }
 
+// ---- "your trade burns" calculator ----
+// The vault receives about 0.88% of volume (1% fee minus the platform's cut); burnShare% of that buys and burns DRIFT.
+const VAULT_CUT = 0.0088;
+function updateCalc() {
+  const out = document.getElementById('burnOut'); if (!out || !lastData) return;
+  const ps = lastData.chains.map(c => c.priceUsd).filter(Boolean);
+  const px = ps.length ? ps.reduce((a, b) => a + b, 0) / ps.length : lastData.priceUsd;
+  const share = (window.__burnShare || 50) / 100, rate = VAULT_CUT * share;
+  document.getElementById('ratePct').textContent = (rate * 100).toFixed(2);
+  const amt = Math.max(0, Number(document.getElementById('amt').value) || 0);
+  out.textContent = px ? fmt(amt * rate / px) + ' DRIFT 🔥' : '-';
+}
+document.addEventListener('input', e => { if (e.target.id === 'amt') updateCalc(); });
+document.addEventListener('click', e => { const v = e.target.closest('.calc .q button'); if (v) { document.getElementById('amt').value = v.dataset.v; updateCalc(); } });
+
+// ---- downloadable burn card ----
+async function burnCard() {
+  if (!lastData) return;
+  const d = lastData, W = 1200, H = 675;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
+  const bg = g.createRadialGradient(780, 300, 50, 780, 300, 800); bg.addColorStop(0, '#12404e'); bg.addColorStop(1, '#06141b');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  // map: render the live SVG (current state, not mid-replay) to an image
+  const tmp = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); tmp.setAttribute('viewBox', '0 0 1000 560'); tmp.setAttribute('width', '1000'); tmp.setAttribute('height', '560');
+  const keep = document.getElementById('world').innerHTML; drawWorld(d.chains, { still: true });
+  tmp.innerHTML = document.getElementById('world').innerHTML; if (replaying) document.getElementById('world').innerHTML = keep; else drawWorld(d.chains);
+  const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(tmp)], { type: 'image/svg+xml' }));
+  await new Promise(res => { const im = new Image(); im.onload = () => { g.drawImage(im, 380, 40, 860, 482); URL.revokeObjectURL(url); res(); }; im.onerror = res; im.src = url; });
+  const F = (w, s, f) => `${w} ${s}px ${f}`;
+  g.fillStyle = '#e7f0ef'; g.font = F(700, 64, "'Space Grotesk', system-ui, sans-serif"); g.fillText('$' + (window.__ticker || 'DRIFT'), 56, 120);
+  g.fillStyle = '#ff7a3d'; g.font = F(700, 28, "'Space Grotesk', system-ui, sans-serif"); g.fillText('the continents are drifting', 58, 162);
+  const stat = (y, k, v, col) => { g.fillStyle = '#86a3a6'; g.font = F(500, 22, "'Space Grotesk', system-ui, sans-serif"); g.fillText(k, 58, y); g.fillStyle = col || '#e7f0ef'; g.font = F(600, 46, "'JetBrains Mono', monospace"); g.fillText(v, 56, y + 50); };
+  stat(250, 'Burned forever', fmt(d.burned) + ' 🔥', '#ff7a3d');
+  stat(360, 'Of total supply', d.burnedPct.toFixed(d.burnedPct < 1 ? 2 : 1) + '%');
+  stat(470, 'Market cap', usd(d.marketCapUsd));
+  const hrs = d.listedAt ? (Date.parse(d.at) - Date.parse(d.listedAt)) / 3600e3 : null;
+  g.fillStyle = '#86a3a6'; g.font = F(400, 20, "'JetBrains Mono', monospace");
+  g.fillText((hrs != null ? (hrs < 1 ? Math.round(hrs * 60) + ' min' : hrs < 48 ? hrs.toFixed(1) + ' h' : Math.round(hrs / 24) + ' days') + ' since launch · ' : '') + new Date(d.at).toUTCString().slice(5, 22) + ' UTC', 58, 620);
+  g.fillStyle = '#e7f0ef'; g.font = F(600, 28, "'JetBrains Mono', monospace"); g.textAlign = 'right'; g.fillText('driftcoin.fun', W - 48, 625);
+  const a = document.createElement('a'); a.download = `drift-burn-${new Date().toISOString().slice(0, 10)}.png`; a.href = cv.toDataURL('image/png'); a.click();
+}
+document.addEventListener('click', e => { if (e.target.id === 'dl') burnCard(); });
+
 function drawChart(series) {
   const el = document.getElementById('chart');
   if (!series || series.length < 2) { el.innerHTML = '<text x="480" y="115" text-anchor="middle" fill="#86a3a6" font-family="Space Grotesk" font-size="15">The chart fills in as burns happen.</text>'; return; }
@@ -210,7 +288,7 @@ function drawChart(series) {
 async function load() {
   let cfg = {}; try { cfg = await (await fetch('config.json?' + Date.now())).json(); } catch {}
   document.getElementById('tk').textContent = cfg.ticker || 'DRIFT';
-  document.getElementById('share').textContent = cfg.burnShare || 50;
+  document.getElementById('share').textContent = cfg.burnShare || 50; window.__burnShare = cfg.burnShare || 50; window.__ticker = cfg.ticker;
   if (cfg.x) document.getElementById('xlink').href = cfg.x; else document.getElementById('xlink').style.display = 'none';
   // contract addresses: cfg.ca = { solana, evm } or per chain
   const ca = cfg.ca || {}, rows = [];
@@ -244,7 +322,7 @@ async function load() {
   document.getElementById('vol').textContent = usd(d.volume24hUsd);
   const first = !lastData; lastData = d; lastSeries = series;
   if (!replaying) { if (first) replay(4500); else drawWorld(d.chains); }
-  drawChart(series);
+  drawChart(series); updateCalc();
   document.querySelector('#tbl tbody').innerHTML = d.chains.map(c => { const [l, col] = CH[c.chain] || [c.chain, '#ccc'];
     return `<tr><td><span class="dot" style="background:${col}"></span>${l}</td><td>${fmt(c.burned)}</td><td>${(c.burned / (c.slice || 1) * 100).toFixed(3)}%</td><td>${usd(c.volume24hUsd)}</td><td>${price(c.priceUsd)}</td></tr>`; }).join('');
 }
