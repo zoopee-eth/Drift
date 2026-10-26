@@ -1,58 +1,58 @@
 {
- "at": "2026-10-26T20:36:10.419Z",
+ "at": "2026-10-26T20:46:13.484Z",
  "slug": "drift",
  "name": "Drift",
  "ticker": "DRIFT",
  "degen": false,
  "totalSupply": 5000000000,
- "burned": 132301747.49005578,
- "burnedPct": 2.6460349498011158,
- "supplyNow": 4867698252.509944,
- "priceUsd": 0.0000044610781230538974,
- "marketCapUsd": 21715,
- "volume24hUsd": 379858,
- "trades24h": 6489,
+ "burned": 133070173.77129602,
+ "burnedPct": 2.6614034754259204,
+ "supplyNow": 4866929826.228704,
+ "priceUsd": 0.000004375395981501545,
+ "marketCapUsd": 21295,
+ "volume24hUsd": 380481,
+ "trades24h": 6511,
  "listedAt": "2026-10-26T02:42:05.000Z",
  "chains": [
   {
    "chain": "solana",
    "burned": 68599153.43086906,
    "slice": 1000000000,
-   "priceUsd": 0.0000044610781,
-   "liquidityUsd": 4314.16866,
-   "volume24hUsd": 213388
+   "priceUsd": 0.000004375396,
+   "liquidityUsd": 4243.3748000000005,
+   "volume24hUsd": 213839
   },
   {
    "chain": "bsc",
    "burned": 19912276.07995237,
    "slice": 1000000000,
-   "priceUsd": 0.000004557705,
-   "liquidityUsd": 4404.38842,
-   "volume24hUsd": 45396
+   "priceUsd": 0.0000044414757,
+   "liquidityUsd": 4307.9766899999995,
+   "volume24hUsd": 45378
   },
   {
    "chain": "base",
    "burned": 22054675.604032066,
    "slice": 1000000000,
-   "priceUsd": 0.0000046021863,
-   "liquidityUsd": 4437.40561,
+   "priceUsd": 0.0000043968487,
+   "liquidityUsd": 4268.04216,
    "volume24hUsd": 51798
   },
   {
    "chain": "robinhood",
-   "burned": 21735642.374438897,
+   "burned": 22504068.655679137,
    "slice": 1000000000,
-   "priceUsd": 0.0000046434603,
-   "liquidityUsd": 4470.795,
-   "volume24hUsd": 52683
+   "priceUsd": 0.0000043854659,
+   "liquidityUsd": 4258.60156,
+   "volume24hUsd": 52791
   },
   {
    "chain": "ethereum",
    "burned": 0.000763389,
    "slice": 1000000000,
-   "priceUsd": 0.000004977003,
-   "liquidityUsd": 4735.35117,
-   "volume24hUsd": 16594
+   "priceUsd": 0.000004696097,
+   "liquidityUsd": 4511.98919,
+   "volume24hUsd": 16676
   }
  ]
 }
