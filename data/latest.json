@@ -1,5 +1,5 @@
 {
- "at": "2026-11-04T10:26:24.308Z",
+ "at": "2026-11-04T10:36:33.487Z",
  "slug": "drift",
  "name": "Drift",
  "ticker": "DRIFT",
@@ -8,8 +8,8 @@
  "burned": 142192368.17977598,
  "burnedPct": 2.8438473635955197,
  "supplyNow": 4857807631.820224,
- "priceUsd": 0.000003210070863102002,
- "marketCapUsd": 15594,
+ "priceUsd": 0.000003220803566275047,
+ "marketCapUsd": 15646,
  "volume24hUsd": 51,
  "trades24h": 3,
  "listedAt": "2026-10-26T02:42:05.000Z",
@@ -18,40 +18,40 @@
    "chain": "solana",
    "burned": 73582372.81019312,
    "slice": 1000000000,
-   "priceUsd": 0.0000032100709,
-   "liquidityUsd": 3195.17273,
+   "priceUsd": 0.0000032208036,
+   "liquidityUsd": 3205.85559,
    "volume24hUsd": 25
   },
   {
    "chain": "bsc",
    "burned": 21548394.12509528,
    "slice": 1000000000,
-   "priceUsd": 0.0000032682871,
-   "liquidityUsd": 3255.73534,
+   "priceUsd": 0.0000032697105,
+   "liquidityUsd": 3257.15329,
    "volume24hUsd": 0
   },
   {
    "chain": "base",
    "burned": 23219823.16169014,
    "slice": 1000000000,
-   "priceUsd": 0.000003426652,
-   "liquidityUsd": 3415.51425,
+   "priceUsd": 0.0000034318234,
+   "liquidityUsd": 3420.66888,
    "volume24hUsd": 0
   },
   {
    "chain": "robinhood",
    "burned": 23841778.08203405,
    "slice": 1000000000,
-   "priceUsd": 0.0000033285426,
-   "liquidityUsd": 3322.32643,
+   "priceUsd": 0.000003333566,
+   "liquidityUsd": 3327.34044,
    "volume24hUsd": 26
   },
   {
    "chain": "ethereum",
    "burned": 0.000763389,
    "slice": 1000000000,
-   "priceUsd": 0.0000034282558,
-   "liquidityUsd": 3417.02648,
+   "priceUsd": 0.0000034334297,
+   "liquidityUsd": 3422.18344,
    "volume24hUsd": 0
   }
  ]
